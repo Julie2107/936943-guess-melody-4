@@ -11,6 +11,28 @@ const QuestionArtist = (props) => {
     song,
   } = question;
 
+  const handleOnChangeTrack = (answer) => {
+    onAnswer(question, answer);
+  };
+
+  const getArtistPoint = (answer, i) => {
+    const answerID = `answer-${i}`;
+    return (
+      <div key={answer.artist} className="artist">
+        <input className="artist__input visually-hidden" type="radio" name="answer" value={answerID} id={answerID}
+          onChange={(evt) => {
+            evt.preventDefault();
+            handleOnChangeTrack(answer);
+          }}
+        />
+        <label className="artist__name" htmlFor={answerID}>
+          <img className="artist__picture" src={answer.picture} alt={answer.artist} />
+          {answer.artist}
+        </label>
+      </div>
+    );
+  };
+
   return (
     <section className="game game--artist">
       <header className="game__header">
@@ -43,20 +65,7 @@ const QuestionArtist = (props) => {
           </div>
         </div>
         <form className="game__artist">
-          {answers.map((answer, i) => (
-            <div key={answer.artist} className="artist">
-              <input className="artist__input visually-hidden" type="radio" name="answer" value={`answer-${i}`} id={`answer-${i}`}
-                onChange={(evt) => {
-                  evt.preventDefault();
-                  onAnswer(question, answer);
-                }}
-              />
-              <label className="artist__name" htmlFor={`answer-${i}`}>
-                <img className="artist__picture" src={answer.picture} alt={answer.artist} />
-                {answer.artist}
-              </label>
-            </div>
-          ))}
+          {answers.map(getArtistPoint)}
         </form>
       </section>
     </section>
