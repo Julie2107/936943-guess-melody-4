@@ -13,6 +13,7 @@ module.exports = {
     port: 1337,
     inline: true,
     hot: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
