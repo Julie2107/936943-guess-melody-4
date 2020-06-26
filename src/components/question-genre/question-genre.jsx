@@ -20,17 +20,11 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  render() {
-    const {onAnswer, question} = this.props;
-    const {answers: userAnswers} = this.state;
-    const {
-      answers,
-      genre,
-    } = question;
+  _getGenreAnswers(userAnswers, answers) {
 
-
-    const getGenreAnswerPoint = (answer, i) => {
+    return answers.map((answer, i) => {
       const answerID = `answer-${i}`;
+
       return (
         <div key={`${i}-${answer.src}`} className="track">
           <button className="track__button track__button--play" type="button"></button>
@@ -53,6 +47,24 @@ class QuestionGenre extends PureComponent {
           </div>
         </div>
       );
+    });
+  }
+
+  _handleSubmitButton(question, onAnswer) {
+    return (evt) => {
+      evt.preventDefault();
+      onAnswer(question, this.state.answers);
+    };
+  }
+
+  render() {
+    const {onAnswer, question} = this.props;
+    const {answers: userAnswers} = this.state;
+    const {answers, genre} = question;
+    const timerLineStyle = {
+      filter: `url(#blur)`,
+      transform: `rotate(-90deg) scaleY(-1)`,
+      transformOrigin: `center`
     };
 
     return (
@@ -65,7 +77,7 @@ class QuestionGenre extends PureComponent {
 
           <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
             <circle className="timer__line" cx="390" cy="390" r="370"
-              style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}}/>
+              style={timerLineStyle}/>
           </svg>
 
           <div className="game__mistakes">
@@ -79,12 +91,9 @@ class QuestionGenre extends PureComponent {
           <h2 className="game__title">Выберите {genre} треки</h2>
           <form
             className="game__tracks"
-            onSubmit={(evt) => {
-              evt.preventDefault();
-              onAnswer(question, this.state.answers);
-            }}
+            onSubmit={this._handleSubmitButton(question, onAnswer)}
           >
-            {answers.map(getGenreAnswerPoint)}
+            {this._getGenreAnswers(userAnswers, answers)}
             <button className="game__submit button" type="submit">Ответить</button>
           </form>
         </section>

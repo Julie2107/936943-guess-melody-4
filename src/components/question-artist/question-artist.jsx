@@ -15,8 +15,14 @@ const QuestionArtist = (props) => {
     onAnswer(question, answer);
   };
 
+  const timerLineStyle = {
+    filter: `url(#blur)`,
+    transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`
+  };
+
   const getArtistPoint = (answer, i) => {
     const answerID = `answer-${i}`;
+
     return (
       <div key={answer.artist} className="artist">
         <input className="artist__input visually-hidden" type="radio" name="answer" value={answerID} id={answerID}
@@ -42,7 +48,7 @@ const QuestionArtist = (props) => {
         </a>
 
         <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
-          <circle className="timer__line" cx="390" cy="390" r="370" style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}} />
+          <circle className="timer__line" cx="390" cy="390" r="370" style={timerLineStyle} />
         </svg>
 
         <div className="game__mistakes">
