@@ -9,8 +9,11 @@ class QuestionGenre extends PureComponent {
     super(props);
 
     this.state = {
+      activePlayer: 0,
       answers: [false, false, false, false],
     };
+
+    this._handleSubmitButton = this._handleSubmitButton.bind(this);
   }
 
   _handleOnChangeTrack(evt, userAnswers, i) {
@@ -21,7 +24,13 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  _getGenreAnswers(userAnswers, answers) {
+  _handlePlayButtonClick(activePlayer, i) {
+    this.setState({
+      activePlayer: activePlayer === i ? -1 : i,
+    })
+  }
+
+  _getGenreAnswers(userAnswers, answers, activePlayer) {
 
     return answers.map((answer, i) => {
       const answerID = `answer-${i}`;
@@ -29,7 +38,10 @@ class QuestionGenre extends PureComponent {
       return (
         <div key={`${i}-${answer.src}`} className="track">
           <AudioPlayer
-            isPlaying={true}
+            onPlayButtonClick={() => {
+              this._handlePlayButtonClick(activePlayer, i)
+            }}
+            isPlaying={i === activePlayer}
             src={answer.src}
           />
           <div className="game__answer">
@@ -58,7 +70,7 @@ class QuestionGenre extends PureComponent {
 
   render() {
     const {onAnswer, question} = this.props;
-    const {answers: userAnswers} = this.state;
+    const {answers: userAnswers, activePlayer} = this.state;
     const {answers, genre} = question;
 
     return (
@@ -66,7 +78,7 @@ class QuestionGenre extends PureComponent {
         <h2 className="game__title">Выберите {genre} треки</h2>
         <form
           className="game__tracks"
-          onSubmit={this._handleSubmitButton(question, onAnswer)}
+          onSubmit={this._handleSubmitButton(question, onAnswer, activePlayer)}
         >
           {this._getGenreAnswers(userAnswers, answers)}
           <button className="game__submit button" type="submit">Ответить</button>

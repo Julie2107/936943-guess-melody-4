@@ -1,23 +1,50 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 
 import AudioPlayer from "../audio-player/audio-player.jsx";
 import {GameType} from "../../consts.js";
 
-const QuestionArtist = (props) => {
+class QuestionArtist extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  const {onAnswer, question} = props;
-  const {
-    answers,
-    song,
-  } = question;
+    this.state = {
+      isPlaying: true,
+    };
 
-  const handleOnChangeTrack = (answer) => {
+    this._handleOnChangeTrack = this._handleOnChangeTrack.bind(this);
+  }
+
+  render() {
+    const {isPlaying} = this.state;
+    const {question} = this.props;
+    const {answers, song} = question;
+
+    return (
+      <section className="game__screen">
+        <h2 className="game__title">Кто исполняет эту песню?</h2>
+        <div className="game__track">
+          <div className="track">
+            <AudioPlayer
+              isPlaying={isPlaying}
+              src={song.src}
+              onPlayButtonClick={() => this.setState({isPlaying: !isPlaying})}
+            />
+          </div>
+        </div>
+        <form className="game__artist">
+          {answers.map(this._getArtistPoint)}
+        </form>
+      </section>
+    );
+  }
+
+  _handleOnChangeTrack(answer) {
+    const {onAnswer, question} = this.props;
     onAnswer(question, answer);
-  };
+  }
 
-
-  const getArtistPoint = (answer, i) => {
+  _getArtistPoint(answer, i) {
     const answerID = `answer-${i}`;
 
     return (
@@ -25,7 +52,7 @@ const QuestionArtist = (props) => {
         <input className="artist__input visually-hidden" type="radio" name="answer" value={answerID} id={answerID}
           onChange={(evt) => {
             evt.preventDefault();
-            handleOnChangeTrack(answer);
+            this._handleOnChangeTrack(answer);
           }}
         />
         <label className="artist__name" htmlFor={answerID}>
@@ -34,25 +61,8 @@ const QuestionArtist = (props) => {
         </label>
       </div>
     );
-  };
-
-  return (
-    <section className="game__screen">
-      <h2 className="game__title">Кто исполняет эту песню?</h2>
-      <div className="game__track">
-        <div className="track">
-          <AudioPlayer
-            isPlaying={true}
-            src={song.src}
-          />
-        </div>
-      </div>
-      <form className="game__artist">
-        {answers.map(getArtistPoint)}
-      </form>
-    </section>
-  );
-};
+  }
+}
 
 QuestionArtist.propTypes = {
   onAnswer: PropTypes.func.isRequired,
