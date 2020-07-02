@@ -5,6 +5,7 @@ import {Switch, Route, BrowserRouter} from "react-router-dom";
 import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
 import QuestionArtist from "../question-artist/question-artist.jsx";
 import QuestionGenre from "../question-genre/question-genre.jsx";
+import GameScreen from "../game-screen/game-screen.jsx";
 import {GameType, FIRST_STEP} from "../../consts.js";
 
 class App extends PureComponent {
@@ -49,17 +50,25 @@ class App extends PureComponent {
       switch (question.type) {
         case GameType.ARTIST:
           return (
-            <QuestionArtist
-              question={question}
-              onAnswer={this._handleOnAnswer}
-            />
+            <GameScreen
+              type={question.type}
+            >
+              <QuestionArtist
+                question={question}
+                onAnswer={this._handleOnAnswer}
+              />
+            </GameScreen>
           );
         case GameType.GENRE:
           return (
-            <QuestionGenre
-              question={question}
-              onAnswer={this._handleOnAnswer}
-            />
+            <GameScreen
+              type={question.type}
+            >
+              <QuestionGenre
+                question={question}
+                onAnswer={this._handleOnAnswer}
+              />
+            </GameScreen>
           );
       }
     }

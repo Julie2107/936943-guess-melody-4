@@ -8,3 +8,8 @@ export const GameType = {
 };
 
 export const FIRST_STEP = -1;
+
+export const timerLineStyle = {
+  filter: `url(#blur)`,
+  transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`
+};

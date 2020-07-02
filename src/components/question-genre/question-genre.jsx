@@ -1,6 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 
+import AudioPlayer from "../audio-player/audio-player.jsx";
 import {GameType} from "../../consts.js";
 
 class QuestionGenre extends PureComponent {
@@ -27,12 +28,10 @@ class QuestionGenre extends PureComponent {
 
       return (
         <div key={`${i}-${answer.src}`} className="track">
-          <button className="track__button track__button--play" type="button"></button>
-          <div className="track__status">
-            <audio>
-              src={answer.src}
-            </audio>
-          </div>
+          <AudioPlayer
+            isPlaying={true}
+            src={answer.src}
+          />
           <div className="game__answer">
             <input
               className="game__input visually-hidden" type="checkbox" name="answer"
@@ -61,42 +60,17 @@ class QuestionGenre extends PureComponent {
     const {onAnswer, question} = this.props;
     const {answers: userAnswers} = this.state;
     const {answers, genre} = question;
-    const timerLineStyle = {
-      filter: `url(#blur)`,
-      transform: `rotate(-90deg) scaleY(-1)`,
-      transformOrigin: `center`
-    };
 
     return (
-      <section className="game game--genre">
-        <header className="game__header">
-          <a className="game__back" href="#">
-            <span className="visually-hidden">Сыграть ещё раз</span>
-            <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию" />
-          </a>
-
-          <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
-            <circle className="timer__line" cx="390" cy="390" r="370"
-              style={timerLineStyle}/>
-          </svg>
-
-          <div className="game__mistakes">
-            <div className="wrong"/>
-            <div className="wrong"/>
-            <div className="wrong"/>
-          </div>
-        </header>
-
-        <section className="game__screen">
-          <h2 className="game__title">Выберите {genre} треки</h2>
-          <form
-            className="game__tracks"
-            onSubmit={this._handleSubmitButton(question, onAnswer)}
-          >
-            {this._getGenreAnswers(userAnswers, answers)}
-            <button className="game__submit button" type="submit">Ответить</button>
-          </form>
-        </section>
+      <section className="game__screen">
+        <h2 className="game__title">Выберите {genre} треки</h2>
+        <form
+          className="game__tracks"
+          onSubmit={this._handleSubmitButton(question, onAnswer)}
+        >
+          {this._getGenreAnswers(userAnswers, answers)}
+          <button className="game__submit button" type="submit">Ответить</button>
+        </form>
       </section>
     );
   }
