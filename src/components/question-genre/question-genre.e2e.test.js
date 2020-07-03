@@ -36,6 +36,7 @@ it(`user answers genre form is not sent`, () => {
   const genreQuestion = shallow(<QuestionGenre
     onAnswer={onAnswer}
     question={question}
+    renderPlayer={() => {}}
   />);
 
   const form = genreQuestion.find(`form`);
@@ -56,6 +57,7 @@ it(`User answer passed to callback consistent with prop`, () => {
   const genreQuestion = shallow(<QuestionGenre
     onAnswer={onAnswer}
     question={question}
+    renderPlayer={() => {}}
   />);
 
   const form = genreQuestion.find(`form`);

@@ -1,7 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 
-import AudioPlayer from "../audio-player/audio-player.jsx";
+//  import AudioPlayer from "../audio-player/audio-player.jsx";
 import {GameType} from "../../consts.js";
 
 class QuestionGenre extends PureComponent {
@@ -27,23 +27,17 @@ class QuestionGenre extends PureComponent {
   _handlePlayButtonClick(activePlayer, i) {
     this.setState({
       activePlayer: activePlayer === i ? -1 : i,
-    })
+    });
   }
 
-  _getGenreAnswers(userAnswers, answers, activePlayer) {
+  _getGenreAnswers(userAnswers, answers, activePlayer, renderPlayer) {
 
     return answers.map((answer, i) => {
       const answerID = `answer-${i}`;
 
       return (
         <div key={`${i}-${answer.src}`} className="track">
-          <AudioPlayer
-            onPlayButtonClick={() => {
-              this._handlePlayButtonClick(activePlayer, i)
-            }}
-            isPlaying={i === activePlayer}
-            src={answer.src}
-          />
+          {renderPlayer(answer.src, i, activePlayer)}
           <div className="game__answer">
             <input
               className="game__input visually-hidden" type="checkbox" name="answer"
@@ -69,7 +63,7 @@ class QuestionGenre extends PureComponent {
   }
 
   render() {
-    const {onAnswer, question} = this.props;
+    const {onAnswer, question, renderPlayer} = this.props;
     const {answers: userAnswers, activePlayer} = this.state;
     const {answers, genre} = question;
 
@@ -78,9 +72,9 @@ class QuestionGenre extends PureComponent {
         <h2 className="game__title">Выберите {genre} треки</h2>
         <form
           className="game__tracks"
-          onSubmit={this._handleSubmitButton(question, onAnswer, activePlayer)}
+          onSubmit={this._handleSubmitButton(question, onAnswer, activePlayer, renderPlayer)}
         >
-          {this._getGenreAnswers(userAnswers, answers)}
+          {this._getGenreAnswers(userAnswers, answers, activePlayer, renderPlayer)}
           <button className="game__submit button" type="submit">Ответить</button>
         </form>
       </section>
@@ -98,6 +92,7 @@ QuestionGenre.propTypes = {
     genre: PropTypes.string.isRequired,
     type: PropTypes.oneOf([GameType.ARTIST, GameType.GENRE]).isRequired,
   }).isRequired,
+  renderPlayer: PropTypes.func.isRequired,
 };
 
 export default QuestionGenre;

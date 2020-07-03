@@ -25,6 +25,7 @@ it(`questionArtist is rendered correctly`, () => {
       <QuestionArtist
         question={question}
         onAnswer={() => {}}
+        renderPlayer={() => {}}
       />, {
         createNodeMock: () => {
           return {};
