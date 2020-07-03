@@ -1,7 +1,6 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 
-//  import AudioPlayer from "../audio-player/audio-player.jsx";
 import {GameType} from "../../consts.js";
 
 class QuestionGenre extends PureComponent {
@@ -14,6 +13,7 @@ class QuestionGenre extends PureComponent {
     };
 
     this._handleSubmitButton = this._handleSubmitButton.bind(this);
+    this._getGenreAnswers = this._getGenreAnswers.bind(this);
   }
 
   _handleOnChangeTrack(evt, userAnswers, i) {
@@ -30,13 +30,17 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  _getGenreAnswers(userAnswers, answers, activePlayer, renderPlayer) {
+  _getGenreAnswers() {
+    const {question, renderPlayer} = this.props;
+    const {answers} = question;
+    const {answers: userAnswers, activePlayer} = this.state;
 
     return answers.map((answer, i) => {
       const answerID = `answer-${i}`;
+      const keyCount = `${i}-${answer.src}`;
 
       return (
-        <div key={`${i}-${answer.src}`} className="track">
+        <div key={keyCount} className="track">
           {renderPlayer(answer.src, i, activePlayer)}
           <div className="game__answer">
             <input
@@ -55,26 +59,25 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  _handleSubmitButton(question, onAnswer) {
-    return (evt) => {
-      evt.preventDefault();
-      onAnswer(question, this.state.answers);
-    };
+  _handleSubmitButton(evt) {
+    const {onAnswer, question} = this.props;
+
+    evt.preventDefault();
+    onAnswer(question, this.state.answers);
   }
 
   render() {
-    const {onAnswer, question, renderPlayer} = this.props;
-    const {answers: userAnswers, activePlayer} = this.state;
-    const {answers, genre} = question;
+    const {question} = this.props;
+    const {genre} = question;
 
     return (
       <section className="game__screen">
         <h2 className="game__title">Выберите {genre} треки</h2>
         <form
           className="game__tracks"
-          onSubmit={this._handleSubmitButton(question, onAnswer, activePlayer, renderPlayer)}
+          onSubmit={this._handleSubmitButton}
         >
-          {this._getGenreAnswers(userAnswers, answers, activePlayer, renderPlayer)}
+          {this._getGenreAnswers()}
           <button className="game__submit button" type="submit">Ответить</button>
         </form>
       </section>

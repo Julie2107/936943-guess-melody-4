@@ -4,9 +4,10 @@ import {GameType, timerLineStyle} from "../../consts.js";
 
 const GameScreen = (props) => {
   const {type, children} = props;
+  const gameTypeClassName = `game game--${type}`;
 
   return (
-    <section className={`game game--${type}`}>
+    <section className={gameTypeClassName}>
       <header className="game__header">
         <a className="game__back" href="#">
           <span className="visually-hidden">Сыграть ещё раз</span>

@@ -11,10 +11,12 @@ class QuestionArtist extends PureComponent {
       isPlaying: true,
     };
 
+    this._getArtistPoint = this._getArtistPoint.bind(this);
+
   }
 
   render() {
-    const {onAnswer, question, renderPlayer} = this.props;
+    const {question, renderPlayer} = this.props;
     const {answers, song} = question;
 
     return (
@@ -26,16 +28,16 @@ class QuestionArtist extends PureComponent {
           </div>
         </div>
         <form className="game__artist">
-          {answers.map((answer, i) => this._getArtistPoint(answer, i, onAnswer, question))}
+          {answers.map(this._getArtistPoint)}
         </form>
       </section>
     );
   }
 
 
-  _getArtistPoint(answer, i, onAnswer, question) {
+  _getArtistPoint(answer, i) {
     const answerID = `answer-${i}`;
-    // const {onAnswer, question} = this.props;
+    const {onAnswer, question} = this.props;
 
     return (
       <div key={answer.artist} className="artist">

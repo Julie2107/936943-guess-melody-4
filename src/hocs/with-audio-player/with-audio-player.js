@@ -11,22 +11,34 @@ const withActivePlayer = (Component) => {
       };
     }
 
-    render() {
+    _handlePlayButtonClick(id) {
       const {activePlayerId} = this.state;
+
+      return () => {
+        this.setState({
+          activePlayerId: activePlayerId === id ? -1 : id
+        });
+      };
+    }
+
+    _getAudioPlayer(src, id) {
+      const {activePlayerId} = this.state;
+      const isPLayingId = id === activePlayerId;
+
+      return (
+        <AudioPlayer
+          src={src}
+          isPlaying={isPLayingId}
+          onPlayButtonClick={this._handlePlayButtonClick(id)}
+        />
+      );
+    }
+
+    render() {
 
       return <Component
         {...this.props}
-        renderPlayer={(src, id) => {
-          return (
-            <AudioPlayer
-              src={src}
-              isPlaying={id === activePlayerId}
-              onPlayButtonClick={() => this.setState({
-                activePlayerId: activePlayerId === id ? -1 : id
-              })}
-            />
-          );
-        }}
+        renderPlayer={(src, id) => this._getAudioPlayer(src, id)}
       />;
     }
   }
