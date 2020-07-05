@@ -8,8 +8,12 @@ class QuestionGenre extends PureComponent {
     super(props);
 
     this.state = {
+      activePlayer: 0,
       answers: [false, false, false, false],
     };
+
+    this._handleSubmitButton = this._handleSubmitButton.bind(this);
+    this._getGenreAnswers = this._getGenreAnswers.bind(this);
   }
 
   _handleOnChangeTrack(evt, userAnswers, i) {
@@ -20,19 +24,24 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  _getGenreAnswers(userAnswers, answers) {
+  _handlePlayButtonClick(activePlayer, i) {
+    this.setState({
+      activePlayer: activePlayer === i ? -1 : i,
+    });
+  }
+
+  _getGenreAnswers() {
+    const {question, renderPlayer} = this.props;
+    const {answers} = question;
+    const {answers: userAnswers, activePlayer} = this.state;
 
     return answers.map((answer, i) => {
       const answerID = `answer-${i}`;
+      const keyCount = `${i}-${answer.src}`;
 
       return (
-        <div key={`${i}-${answer.src}`} className="track">
-          <button className="track__button track__button--play" type="button"></button>
-          <div className="track__status">
-            <audio>
-              src={answer.src}
-            </audio>
-          </div>
+        <div key={keyCount} className="track">
+          {renderPlayer(answer.src, i, activePlayer)}
           <div className="game__answer">
             <input
               className="game__input visually-hidden" type="checkbox" name="answer"
@@ -50,53 +59,27 @@ class QuestionGenre extends PureComponent {
     });
   }
 
-  _handleSubmitButton(question, onAnswer) {
-    return (evt) => {
-      evt.preventDefault();
-      onAnswer(question, this.state.answers);
-    };
+  _handleSubmitButton(evt) {
+    const {onAnswer, question} = this.props;
+
+    evt.preventDefault();
+    onAnswer(question, this.state.answers);
   }
 
   render() {
-    const {onAnswer, question} = this.props;
-    const {answers: userAnswers} = this.state;
-    const {answers, genre} = question;
-    const timerLineStyle = {
-      filter: `url(#blur)`,
-      transform: `rotate(-90deg) scaleY(-1)`,
-      transformOrigin: `center`
-    };
+    const {question} = this.props;
+    const {genre} = question;
 
     return (
-      <section className="game game--genre">
-        <header className="game__header">
-          <a className="game__back" href="#">
-            <span className="visually-hidden">Сыграть ещё раз</span>
-            <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию" />
-          </a>
-
-          <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
-            <circle className="timer__line" cx="390" cy="390" r="370"
-              style={timerLineStyle}/>
-          </svg>
-
-          <div className="game__mistakes">
-            <div className="wrong"/>
-            <div className="wrong"/>
-            <div className="wrong"/>
-          </div>
-        </header>
-
-        <section className="game__screen">
-          <h2 className="game__title">Выберите {genre} треки</h2>
-          <form
-            className="game__tracks"
-            onSubmit={this._handleSubmitButton(question, onAnswer)}
-          >
-            {this._getGenreAnswers(userAnswers, answers)}
-            <button className="game__submit button" type="submit">Ответить</button>
-          </form>
-        </section>
+      <section className="game__screen">
+        <h2 className="game__title">Выберите {genre} треки</h2>
+        <form
+          className="game__tracks"
+          onSubmit={this._handleSubmitButton}
+        >
+          {this._getGenreAnswers()}
+          <button className="game__submit button" type="submit">Ответить</button>
+        </form>
       </section>
     );
   }
@@ -112,6 +95,7 @@ QuestionGenre.propTypes = {
     genre: PropTypes.string.isRequired,
     type: PropTypes.oneOf([GameType.ARTIST, GameType.GENRE]).isRequired,
   }).isRequired,
+  renderPlayer: PropTypes.func.isRequired,
 };
 
 export default QuestionGenre;

@@ -1,34 +1,50 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 
 import {GameType} from "../../consts.js";
 
-const QuestionArtist = (props) => {
+class QuestionArtist extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  const {onAnswer, question} = props;
-  const {
-    answers,
-    song,
-  } = question;
+    this.state = {
+      isPlaying: true,
+    };
 
-  const handleOnChangeTrack = (answer) => {
-    onAnswer(question, answer);
-  };
+    this._getArtistPoint = this._getArtistPoint.bind(this);
 
-  const timerLineStyle = {
-    filter: `url(#blur)`,
-    transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`
-  };
+  }
 
-  const getArtistPoint = (answer, i) => {
+  render() {
+    const {question, renderPlayer} = this.props;
+    const {answers, song} = question;
+
+    return (
+      <section className="game__screen">
+        <h2 className="game__title">Кто исполняет эту песню?</h2>
+        <div className="game__track">
+          <div className="track">
+            {renderPlayer(song.src, 0)}
+          </div>
+        </div>
+        <form className="game__artist">
+          {answers.map(this._getArtistPoint)}
+        </form>
+      </section>
+    );
+  }
+
+
+  _getArtistPoint(answer, i) {
     const answerID = `answer-${i}`;
+    const {onAnswer, question} = this.props;
 
     return (
       <div key={answer.artist} className="artist">
         <input className="artist__input visually-hidden" type="radio" name="answer" value={answerID} id={answerID}
           onChange={(evt) => {
             evt.preventDefault();
-            handleOnChangeTrack(answer);
+            onAnswer(question, answer);
           }}
         />
         <label className="artist__name" htmlFor={answerID}>
@@ -37,46 +53,8 @@ const QuestionArtist = (props) => {
         </label>
       </div>
     );
-  };
-
-  return (
-    <section className="game game--artist">
-      <header className="game__header">
-        <a className="game__back" href="#">
-          <span className="visually-hidden">Сыграть ещё раз</span>
-          <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
-        </a>
-
-        <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
-          <circle className="timer__line" cx="390" cy="390" r="370" style={timerLineStyle} />
-        </svg>
-
-        <div className="game__mistakes">
-          <div className="wrong" />
-          <div className="wrong" />
-          <div className="wrong" />
-        </div>
-      </header>
-
-      <section className="game__screen">
-        <h2 className="game__title">Кто исполняет эту песню?</h2>
-        <div className="game__track">
-          <div className="track">
-            <button className="track__button track__button--play" type="button"></button>
-            <div className="track__status">
-              <audio>
-                src={song.src}
-              </audio>
-            </div>
-          </div>
-        </div>
-        <form className="game__artist">
-          {answers.map(getArtistPoint)}
-        </form>
-      </section>
-    </section>
-  );
-};
+  }
+}
 
 QuestionArtist.propTypes = {
   onAnswer: PropTypes.func.isRequired,
@@ -91,6 +69,7 @@ QuestionArtist.propTypes = {
     }).isRequired,
     type: PropTypes.oneOf([GameType.ARTIST, GameType.GENRE]).isRequired,
   }).isRequired,
+  renderPlayer: PropTypes.func.isRequired,
 };
 
 export default QuestionArtist;

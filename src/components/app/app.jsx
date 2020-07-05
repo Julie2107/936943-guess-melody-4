@@ -5,7 +5,12 @@ import {Switch, Route, BrowserRouter} from "react-router-dom";
 import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
 import QuestionArtist from "../question-artist/question-artist.jsx";
 import QuestionGenre from "../question-genre/question-genre.jsx";
+import GameScreen from "../game-screen/game-screen.jsx";
+import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
 import {GameType, FIRST_STEP} from "../../consts.js";
+
+const QuestionGenreWrapped = withAudioPlayer(QuestionGenre);
+const QuestionArtistWrapped = withAudioPlayer(QuestionArtist);
 
 class App extends PureComponent {
   constructor(props) {
@@ -49,17 +54,25 @@ class App extends PureComponent {
       switch (question.type) {
         case GameType.ARTIST:
           return (
-            <QuestionArtist
-              question={question}
-              onAnswer={this._handleOnAnswer}
-            />
+            <GameScreen
+              type={question.type}
+            >
+              <QuestionArtistWrapped
+                question={question}
+                onAnswer={this._handleOnAnswer}
+              />
+            </GameScreen>
           );
         case GameType.GENRE:
           return (
-            <QuestionGenre
-              question={question}
-              onAnswer={this._handleOnAnswer}
-            />
+            <GameScreen
+              type={question.type}
+            >
+              <QuestionGenreWrapped
+                question={question}
+                onAnswer={this._handleOnAnswer}
+              />
+            </GameScreen>
           );
       }
     }
@@ -76,13 +89,13 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path="/artist">
-            <QuestionArtist
+            <QuestionArtistWrapped
               question={questions[1]}
               onAnswer={()=>{}}
             />
           </Route>
           <Route exact path="/dev-genre">
-            <QuestionGenre
+            <QuestionGenreWrapped
               question={questions[0]}
               onAnswer={() => {}}
             />
