@@ -1,12 +1,24 @@
-import React, {PureComponent, createRef} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
 
+interface Props {
+  onPlayButtonClick: () => void;
+  isPlaying: boolean;
+  src: string;
+}
 
-export default class AudioPlayer extends PureComponent {
+interface State {
+  isLoading: boolean;
+  isPlaying: boolean;
+  progress: number;
+}
+
+export default class AudioPlayer extends React.PureComponent<Props, State, {}> {
+  private audioRef: React.RefObject<HTMLAudioElement>;
+
   constructor(props) {
     super(props);
 
-    this._audioRef = createRef();
+    this.audioRef = React.createRef();
 
     this.state = {
       progress: 0,
@@ -19,7 +31,7 @@ export default class AudioPlayer extends PureComponent {
 
   componentDidMount() {
     const {src} = this.props;
-    const audio = this._audioRef.current;
+    const audio = this.audioRef.current;
 
     if (audio) {
       audio.src = src;
@@ -59,7 +71,7 @@ export default class AudioPlayer extends PureComponent {
   }
 
   componentWillUnmount() {
-    const audio = this._audioRef.current;
+    const audio = this.audioRef.current;
 
     if (audio) {
       audio.oncanplaythrough = null;
@@ -94,7 +106,7 @@ export default class AudioPlayer extends PureComponent {
         />
         <div className="track__status">
           <audio
-            ref={this._audioRef}
+            ref={this.audioRef}
           />
         </div>
       </>
@@ -102,7 +114,7 @@ export default class AudioPlayer extends PureComponent {
   }
 
   componentDidUpdate() {
-    const audio = this._audioRef.current;
+    const audio = this.audioRef.current;
 
     if (this.props.isPlaying) {
       audio.play();
@@ -111,9 +123,3 @@ export default class AudioPlayer extends PureComponent {
     }
   }
 }
-
-AudioPlayer.propTypes = {
-  isPlaying: PropTypes.bool.isRequired,
-  onPlayButtonClick: PropTypes.func.isRequired,
-  src: PropTypes.string.isRequired
-};

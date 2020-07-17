@@ -1,8 +1,22 @@
-import React, {PureComponent} from 'react';
-import AudioPlayer from "../../components/audio-player/audio-player.jsx";
+import * as React from 'react';
+import {Subtract} from "utility-types";
+
+import AudioPlayer from "../../components/audio-player/audio-player";
+
+interface State {
+  activePlayerId: number;
+}
+
+interface InjectingProps {
+  renderPlayer: (src: string, id: number) => React.ReactNode;
+}
 
 const withActivePlayer = (Component) => {
-  class WithActivePlayer extends PureComponent {
+  type P = React.ComponentProps<typeof Component>;
+
+  type T = Subtract<P, InjectingProps>;
+
+  class WithActivePlayer extends React.PureComponent<T, State> {
     constructor(props) {
       super(props);
 
@@ -42,8 +56,6 @@ const withActivePlayer = (Component) => {
       />;
     }
   }
-
-  WithActivePlayer.propTypes = {};
 
   return WithActivePlayer;
 };

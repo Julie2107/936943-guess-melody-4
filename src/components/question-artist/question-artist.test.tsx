@@ -1,9 +1,11 @@
-import React from "react";
-import renderer from "react-test-renderer";
-import QuestionArtist from "./question-artist.jsx";
+import * as React from "react";
+import * as renderer from "react-test-renderer";
 
-const question = {
-  type: `artist`,
+import QuestionArtist from "./question-artist";
+import {GameType, QuestionArtistTypes} from "../../types";
+
+const question: QuestionArtistTypes = {
+  type: GameType.ARTIST,
   song: {
     artist: `Jim Beam`,
     src: `https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg`,
@@ -25,7 +27,7 @@ it(`questionArtist is rendered correctly`, () => {
       <QuestionArtist
         question={question}
         onAnswer={() => {}}
-        renderPlayer={() => {}}
+        renderPlayer={() => null}
       />, {
         createNodeMock: () => {
           return {};

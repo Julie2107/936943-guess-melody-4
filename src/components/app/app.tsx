@@ -1,18 +1,29 @@
-import React, {PureComponent} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 
-import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
-import QuestionArtist from "../question-artist/question-artist.jsx";
-import QuestionGenre from "../question-genre/question-genre.jsx";
-import GameScreen from "../game-screen/game-screen.jsx";
-import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
-import {GameType, FIRST_STEP} from "../../consts.js";
+import WelcomeScreen from "../welcome-screen/welcome-screen";
+import QuestionArtist from "../question-artist/question-artist";
+import QuestionGenre from "../question-genre/question-genre";
+import GameScreen from "../game-screen/game-screen";
+import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player";
+import {GameType, FIRST_STEP} from "../../consts";
+import {QuestionArtistTypes, QuestionGenreTypes} from "../../types";
 
 const QuestionGenreWrapped = withAudioPlayer(QuestionGenre);
 const QuestionArtistWrapped = withAudioPlayer(QuestionArtist);
 
-class App extends PureComponent {
+interface Props {
+  errorsCount: number;
+  questions: Question[];
+}
+
+interface State {
+  step: number;
+}
+
+type Question = QuestionArtistTypes | QuestionGenreTypes;
+
+class App extends React.PureComponent<Props, State, {}> {
   constructor(props) {
     super(props);
 
@@ -91,13 +102,17 @@ class App extends PureComponent {
           <Route exact path="/artist">
             <QuestionArtistWrapped
               question={questions[1]}
-              onAnswer={()=>{}}
+              onAnswer={() => {
+                return;
+              }}
             />
           </Route>
           <Route exact path="/dev-genre">
             <QuestionGenreWrapped
               question={questions[0]}
-              onAnswer={() => {}}
+              onAnswer={() => {
+                return;
+              }}
             />
           </Route>
         </Switch>
@@ -105,10 +120,5 @@ class App extends PureComponent {
     );
   }
 }
-
-App.propTypes = {
-  errorsCount: PropTypes.number.isRequired,
-  questions: PropTypes.array.isRequired
-};
 
 export default App;

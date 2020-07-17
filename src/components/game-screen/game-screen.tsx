@@ -1,8 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import {GameType, timerLineStyle} from "../../consts.js";
+import * as React from "react";
+import {GameType, timerLineStyle} from "../../consts";
 
-const GameScreen = (props) => {
+interface Props {
+  type: GameType;
+  children: React.ReactNode;
+}
+
+const GameScreen: React.FunctionComponent<Props> = (props: Props) => {
   const {type, children} = props;
   const gameTypeClassName = `game game--${type}`;
 
@@ -30,14 +34,5 @@ const GameScreen = (props) => {
     </section>
   );
 };
-
-GameScreen.propTypes = {
-  type: PropTypes.oneOf([GameType.ARTIST, GameType.GENRE]).isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ]).isRequired,
-};
-
 
 export default GameScreen;

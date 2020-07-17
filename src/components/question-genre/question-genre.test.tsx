@@ -1,9 +1,11 @@
-import React from "react";
-import renderer from "react-test-renderer";
-import QuestionGenre from "./question-genre.jsx";
+import * as React from "react";
+import * as renderer from "react-test-renderer";
 
-const question = {
-  type: `genre`,
+import QuestionGenre from "./question-genre";
+import {GameType, QuestionGenreTypes} from "../../types";
+
+const question: QuestionGenreTypes = {
+  type: GameType.GENRE,
   genre: `rock`,
   answers: [{
     src: `https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg`,
@@ -25,10 +27,10 @@ it(`QuestionGenre is rendered correctly`, () => {
     <QuestionGenre
       question={question}
       onAnswer={() => {}}
-      renderPlayer={() => {}}
+      renderPlayer={() => null}
     />
   ), {
-    createMock: () => {
+    createNodeMock: () => {
       return {};
     }
   }).toJSON();

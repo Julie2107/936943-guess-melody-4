@@ -1,9 +1,10 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
 
-import AudioPlayer from './audio-player.jsx';
+import AudioPlayer from './audio-player';
+import {GameType, QuestionArtistTypes} from "../../types";
 
-const mock = {
+const mock: ({song: {src: string}}) = {
   song: {
     src: `https://upload.wikimedia.org/wikipedia/commons/1/1f/Uganda_flag_and_national_anthem_-_Oh_Uganda_Land_o.ogg`
   }

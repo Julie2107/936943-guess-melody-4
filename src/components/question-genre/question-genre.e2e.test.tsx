@@ -1,42 +1,41 @@
-import React from "react";
+import * as React from "react";
+import * as Adapter from "enzyme-adapter-react-16";
 import {configure, shallow} from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import QuestionGenre from "./question-genre.jsx";
+
+import QuestionGenre from "./question-genre";
+import {GameType, QuestionGenreTypes} from "../../types";
 
 configure({adapter: new Adapter()});
 
-const mock = {
-  question: {
-    type: `genre`,
-    genre: `rock`,
-    answers: [
-      {
-        src: `path`,
-        genre: `rock`,
-      },
-      {
-        src: `path`,
-        genre: `jazz`,
-      },
-      {
-        src: `path`,
-        genre: `jazz`,
-      },
-      {
-        src: `path`,
-        genre: `blues`,
-      },
-    ],
-  },
+const question: QuestionGenreTypes = {
+  type: GameType.GENRE,
+  genre: `rock`,
+  answers: [
+    {
+      src: `path`,
+      genre: `rock`,
+    },
+    {
+      src: `path`,
+      genre: `jazz`,
+    },
+    {
+      src: `path`,
+      genre: `jazz`,
+    },
+    {
+      src: `path`,
+      genre: `blues`,
+    },
+  ],
 };
 
 it(`user answers genre form is not sent`, () => {
-  const {question} = mock;
   const onAnswer = jest.fn();
   const genreQuestion = shallow(<QuestionGenre
     onAnswer={onAnswer}
     question={question}
-    renderPlayer={() => {}}
+    renderPlayer={() => null}
   />);
 
   const form = genreQuestion.find(`form`);
@@ -50,14 +49,13 @@ it(`user answers genre form is not sent`, () => {
 });
 
 it(`User answer passed to callback consistent with prop`, () => {
-  const {question} = mock;
   const onAnswer = jest.fn((...args) => [...args]);
   const userAnswer = [false, true, false, false];
 
   const genreQuestion = shallow(<QuestionGenre
     onAnswer={onAnswer}
     question={question}
-    renderPlayer={() => {}}
+    renderPlayer={() => null}
   />);
 
   const form = genreQuestion.find(`form`);
