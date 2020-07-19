@@ -1,13 +1,17 @@
 import * as React from "react";
+import {connect} from "react-redux";
+
 import {GameType, timerLineStyle} from "../../consts";
+import Mistakes from "../mistakes/mistakes";
 
 interface Props {
   type: GameType;
   children: React.ReactNode;
+  mistakes: number;
 }
 
 const GameScreen: React.FunctionComponent<Props> = (props: Props) => {
-  const {type, children} = props;
+  const {type, children, mistakes} = props;
   const gameTypeClassName = `game game--${type}`;
 
   return (
@@ -23,11 +27,9 @@ const GameScreen: React.FunctionComponent<Props> = (props: Props) => {
             style={timerLineStyle}/>
         </svg>
 
-        <div className="game__mistakes">
-          <div className="wrong" />
-          <div className="wrong" />
-          <div className="wrong" />
-        </div>
+        <Mistakes
+          count={mistakes}
+        />
       </header>
 
       {children}
@@ -35,4 +37,9 @@ const GameScreen: React.FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-export default GameScreen;
+const mapStateToProps = (state) => ({
+  mistakes: state.mistakes,
+});
+
+export {GameScreen};
+export default connect(mapStateToProps)(GameScreen);
