@@ -54,7 +54,7 @@ describe(`Render App`, () => {
       .create(
           <Provider store={store}>
             <App
-              errorsCount={3}
+              maxMistakes={3}
               questions={questions}
               onUserAnswer={() => {
                 return;
@@ -80,7 +80,7 @@ describe(`Render App`, () => {
       .create(
           <Provider store={store}>
             <App
-              errorsCount={3}
+              maxMistakes={3}
               questions={questions}
               onUserAnswer={() => {
                 return;
@@ -109,7 +109,7 @@ describe(`Render App`, () => {
       .create(
           <Provider store={store}>
             <App
-              errorsCount={3}
+              maxMistakes={3}
               questions={questions}
               onUserAnswer={() => {
                 return;

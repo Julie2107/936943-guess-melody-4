@@ -24,13 +24,13 @@ export default [
       src: `https://upload.wikimedia.org/wikipedia/commons/f/fa/03_-_Vivaldi_Spring_mvt_3_Allegro_-_John_Harrison_violin.ogg`,
     },
     answers: [{
-      picture: `${AVATAR_URL}/${Math.random()}`,
+      picture: `${AVATAR_URL}/A`,
       artist: `John Snow`,
     }, {
-      picture: `${AVATAR_URL}/${Math.random()}`,
+      picture: `${AVATAR_URL}/AB`,
       artist: `Jack Daniels`,
     }, {
-      picture: `${AVATAR_URL}/${Math.random()}`,
+      picture: `${AVATAR_URL}/AC`,
       artist: `Jim Beam`,
     }],
   }

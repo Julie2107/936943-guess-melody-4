@@ -15,7 +15,7 @@ const QuestionGenreWrapped = withAudioPlayer(QuestionGenre);
 const QuestionArtistWrapped = withAudioPlayer(QuestionArtist);
 
 interface Props {
-  errorsCount: number;
+  maxMistakes: number;
   questions: Question[];
   onUserAnswer: () => void;
   onWelcomeButtonClick: () => void;
@@ -27,7 +27,8 @@ type Question = QuestionArtistTypes | QuestionGenreTypes;
 class App extends React.PureComponent<Props, {}> {
 
   _renderGameScreen() {
-    const {errorsCount,
+    const {
+      maxMistakes,
       questions,
       onUserAnswer,
       onWelcomeButtonClick,
@@ -37,7 +38,7 @@ class App extends React.PureComponent<Props, {}> {
     if (step === FIRST_STEP || step >= questions.length) {
       return (
         <WelcomeScreen
-          errorsCount={errorsCount}
+          errorsCount={maxMistakes}
           onWelcomeButtonClick={onWelcomeButtonClick}
         />
       );
@@ -105,6 +106,8 @@ class App extends React.PureComponent<Props, {}> {
 
 const mapStateToProps = (state) => ({
   step: state.step,
+  maxMistakes: state.maxMistakes,
+  questions: state.questions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -112,8 +115,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.incrementStep());
   },
   onUserAnswer(question, answer) {
-    dispatch(ActionCreator.incrementStep());
     dispatch(ActionCreator.incrementMistake(question, answer));
+    dispatch(ActionCreator.incrementStep());
   },
 });
 
