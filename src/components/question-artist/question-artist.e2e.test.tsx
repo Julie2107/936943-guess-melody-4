@@ -30,7 +30,9 @@ const question: QuestionArtistTypes = {
 };
 
 const mockEvent = {
-  preventDefault() {}
+  preventDefault() {
+    return;
+  }
 };
 
 it(`Click on user answer should pass to the callback data-object from which this answer was created`, () => {

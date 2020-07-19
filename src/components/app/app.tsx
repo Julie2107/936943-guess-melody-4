@@ -1,5 +1,7 @@
 import * as React from "react";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {ActionCreator} from "../../reducer.js";
 
 import WelcomeScreen from "../welcome-screen/welcome-screen";
 import QuestionArtist from "../question-artist/question-artist";
@@ -15,48 +17,28 @@ const QuestionArtistWrapped = withAudioPlayer(QuestionArtist);
 interface Props {
   errorsCount: number;
   questions: Question[];
-}
-
-interface State {
+  onUserAnswer: () => void;
+  onWelcomeButtonClick: () => void;
   step: number;
 }
 
 type Question = QuestionArtistTypes | QuestionGenreTypes;
 
-class App extends React.PureComponent<Props, State, {}> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      step: FIRST_STEP,
-    };
-
-    this._handleWelcomeButtonClick = this._handleWelcomeButtonClick.bind(this);
-    this._handleOnAnswer = this._handleOnAnswer.bind(this);
-  }
-
-  _handleWelcomeButtonClick() {
-    this.setState({
-      step: 0,
-    });
-  }
-
-  _handleOnAnswer() {
-    this.setState((prevState) => ({
-      step: prevState.step + 1,
-    }));
-  }
+class App extends React.PureComponent<Props, {}> {
 
   _renderGameScreen() {
-    const {errorsCount, questions} = this.props;
-    const {step} = this.state;
+    const {errorsCount,
+      questions,
+      onUserAnswer,
+      onWelcomeButtonClick,
+      step} = this.props;
     const question = questions[step];
 
     if (step === FIRST_STEP || step >= questions.length) {
       return (
         <WelcomeScreen
           errorsCount={errorsCount}
-          onWelcomeButtonClick={this._handleWelcomeButtonClick}
+          onWelcomeButtonClick={onWelcomeButtonClick}
         />
       );
     }
@@ -70,7 +52,7 @@ class App extends React.PureComponent<Props, State, {}> {
             >
               <QuestionArtistWrapped
                 question={question}
-                onAnswer={this._handleOnAnswer}
+                onAnswer={onUserAnswer}
               />
             </GameScreen>
           );
@@ -81,7 +63,7 @@ class App extends React.PureComponent<Props, State, {}> {
             >
               <QuestionGenreWrapped
                 question={question}
-                onAnswer={this._handleOnAnswer}
+                onAnswer={onUserAnswer}
               />
             </GameScreen>
           );
@@ -121,4 +103,18 @@ class App extends React.PureComponent<Props, State, {}> {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  step: state.step,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onWelcomeButtonClick() {
+    dispatch(ActionCreator.incrementStep());
+  },
+  onUserAnswer() {
+    dispatch(ActionCreator.incrementStep());
+  },
+});
+
+export {App};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 
 import AudioPlayer from './audio-player';
-import {GameType, QuestionArtistTypes} from "../../types";
 
 const mock: ({song: {src: string}}) = {
   song: {
@@ -15,7 +14,9 @@ it(`AudioPlayer is rendered correctly`, () => {
 
   const tree = renderer.create(<AudioPlayer
     isPlaying={false}
-    onPlayButtonClick={() => {}}
+    onPlayButtonClick={() => {
+      return;
+    }}
     src={song.src}
   />, {
     createNodeMock: () => {

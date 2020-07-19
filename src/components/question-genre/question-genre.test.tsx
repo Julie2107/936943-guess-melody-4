@@ -26,7 +26,9 @@ it(`QuestionGenre is rendered correctly`, () => {
   const tree = renderer.create((
     <QuestionGenre
       question={question}
-      onAnswer={() => {}}
+      onAnswer={() => {
+        return;
+      }}
       renderPlayer={() => null}
     />
   ), {

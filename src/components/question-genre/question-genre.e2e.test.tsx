@@ -62,7 +62,9 @@ it(`User answer passed to callback consistent with prop`, () => {
   const inputTwo = genreQuestion.find(`input`).at(1);
 
   inputTwo.simulate(`change`, {target: {checked: true}});
-  form.simulate(`submit`, {preventDefault() {}});
+  form.simulate(`submit`, {preventDefault() {
+    return;
+  }});
 
   expect(onAnswer).toHaveBeenCalledTimes(1);
 

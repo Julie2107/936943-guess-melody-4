@@ -26,7 +26,9 @@ it(`questionArtist is rendered correctly`, () => {
   const tree = renderer.create(
       <QuestionArtist
         question={question}
-        onAnswer={() => {}}
+        onAnswer={() => {
+          return;
+        }}
         renderPlayer={() => null}
       />, {
         createNodeMock: () => {

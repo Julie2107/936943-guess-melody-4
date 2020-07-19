@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as renderer from "react-test-renderer";
+import {App} from "./app";
 
-import App from "./app";
 import {GameType, QuestionArtistTypes, QuestionGenreTypes} from "../../types";
 
 const questions: (QuestionArtistTypes|QuestionGenreTypes)[] = [
@@ -40,13 +40,67 @@ const questions: (QuestionArtistTypes|QuestionGenreTypes)[] = [
   },
 ];
 
-it(`Render App`, () => {
-  const tree = renderer
-    .create(<App
-      errorsCount={3}
-      questions={questions}
-    />)
-    .toJSON();
+describe(`Render App`, () => {
+  it(`Render WelcomeScreen`, () => {
+    const tree = renderer
+      .create(<App
+        errorsCount={3}
+        questions={questions}
+        onUserAnswer={() => {
+          return;
+        }}
+        onWelcomeButtonClick={() => {
+          return;
+        }}
+        step={-1}
+      />)
+      .toJSON();
 
-  expect(tree).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it(`Render QuestionGenre screen`, () => {
+    const tree = renderer
+      .create(<App
+        errorsCount={3}
+        questions={questions}
+        onUserAnswer={() => {
+          return;
+        }}
+        onWelcomeButtonClick={() => {
+          return;
+        }}
+        step={0}
+      />, {
+        createNodeMock: () => {
+          return {};
+        }
+      })
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it(`Render questionArtist screen`, () => {
+    const tree = renderer
+      .create(<App
+        errorsCount={3}
+        questions={questions}
+        onUserAnswer={() => {
+          return;
+        }}
+        onWelcomeButtonClick={() => {
+          return;
+        }}
+        step={1}
+      />, {
+        createNodeMock: () => {
+          return {};
+        }
+      })
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
 });
+
