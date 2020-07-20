@@ -9,9 +9,16 @@ const Mistakes: React.FunctionComponent<Props> = (props: Props) => {
 
   const mistakes = new Array(count).fill(``);
 
+  const renderMistake = (mistake, i) => {
+    const getMistakeKey = `mistake-${i}`;
+    return (
+      <div key={getMistakeKey} className="wrong" />
+    );
+  };
+
   return (
     <div className="game__mistakes">
-      {mistakes.map((it, i) => <div key={`mistake-${i}`} className="wrong" />)}
+      {mistakes.map(renderMistake)}
     </div>
   );
 };
