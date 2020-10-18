@@ -1,7 +1,7 @@
 # Учебный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
-* Студент: [Julia Gankina](https://up.htmlacademy.ru/react/4/user/936943).
-* Наставник: `Неизвестно`.
+* Студент: [Julia Gankina](https://up.htmlacademy.ru/react/4/user/936943)
+
 
 ---
 
